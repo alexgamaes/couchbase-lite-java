@@ -75,7 +75,8 @@ abstract class AbstractReplicatorConfiguration {
     public enum ReplicatorType {
         PUSH_AND_PULL,
         PUSH,
-        PULL
+        PULL,
+        COMPLETE
     }
 
     //---------------------------------------------

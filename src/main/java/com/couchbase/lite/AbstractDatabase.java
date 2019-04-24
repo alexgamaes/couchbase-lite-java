@@ -984,6 +984,11 @@ abstract class AbstractDatabase {
         }
     }
 
+    public void reopen() throws CouchbaseLiteException {
+        this.close();
+        this.open();
+    }
+
     private void open() throws CouchbaseLiteException {
         if (c4db != null) { return; }
 

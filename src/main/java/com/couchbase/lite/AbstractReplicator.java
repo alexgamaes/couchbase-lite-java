@@ -271,6 +271,7 @@ public abstract class AbstractReplicator extends NetworkReachabilityListener {
     private static boolean isPull(ReplicatorConfiguration.ReplicatorType type) {
         return type == ReplicatorConfiguration.ReplicatorType.PUSH_AND_PULL
             || type == ReplicatorConfiguration.ReplicatorType.PULL;
+            || type == ReplicatorConfiguration.ReplicatorType.COMPLETE;
     }
 
     private static int mkmode(boolean active, boolean continuous) {
@@ -335,7 +336,18 @@ public abstract class AbstractReplicator extends NetworkReachabilityListener {
 
             Log.i(DOMAIN, "%s: Starting", this);
             retryCount = 0;
-            internalStart();
+            Database db = config.getDatabase();
+            try {
+                if(config.getReplicatorType() == ReplicatorConfiguration.ReplicatorType.COMPLETE) {
+                    db.delete();
+                    db.reopen();
+                }
+
+                internalStart();
+
+            } catch (CouchbaseLiteException e) {
+                e.printStackTrace();
+            }
         }
     }
 
